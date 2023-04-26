@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { useSearchParams } from "react-router-dom"
+import { useNavigate, useSearchParams } from "react-router-dom"
 import { toast } from "../hooks/use-toast"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -28,10 +28,12 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   })
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
   const searchParams = useSearchParams()
+  const navigate = useNavigate()
 
   async function onSubmit(data: FormData) {
     setIsLoading(true)
 
+    // navigate("/dashboard");
     // const signInResult = await signIn("email", {
     //   email: data.email.toLowerCase(),
     //   redirect: false,
