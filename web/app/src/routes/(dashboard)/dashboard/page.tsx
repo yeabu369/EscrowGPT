@@ -14,7 +14,7 @@ export const metadata = {
   title: "Dashboard",
 }
 
-export default async function DashboardPage() {
+export default function DashboardPage() {
   const user = {
     id: 1,
     name: "John Doe",
@@ -25,19 +25,19 @@ export default async function DashboardPage() {
     redirect("/auth/login")
   }
 
-  const posts: any = null;
+  const Tasks: any = null;
 
   return (
     <DashboardShell>
-      <DashboardHeader heading="Posts" text="Create and manage posts.">
+      <DashboardHeader heading="Tasks" text="Create and manage Tasks.">
         <PostCreateButton />
       </DashboardHeader>
       <div>
         <EmptyPlaceholder>
           <EmptyPlaceholder.Icon name="post" />
-          <EmptyPlaceholder.Title>No posts created</EmptyPlaceholder.Title>
+          <EmptyPlaceholder.Title>No Tasks created</EmptyPlaceholder.Title>
           <EmptyPlaceholder.Description>
-            You don&apos;t have any posts yet. Start creating content.
+            You don&apos;t have any Tasks yet. Start creating content.
           </EmptyPlaceholder.Description>
           <PostCreateButton
             className={cn(

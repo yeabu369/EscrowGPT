@@ -62,17 +62,17 @@ You can access the REST API of the server using the following endpoints:
 ### `GET`
 
 - `/post/:id`: Fetch a single post by its `id`
-- `/feed?searchString={searchString}&take={take}&skip={skip}&orderBy={orderBy}`: Fetch all _published_ posts
+- `/feed?searchString={searchString}&take={take}&skip={skip}&orderBy={orderBy}`: Fetch all _published_ Tasks
   - Query Parameters
-    - `searchString` (optional): This filters posts by `title` or `content`
+    - `searchString` (optional): This filters Tasks by `title` or `content`
     - `take` (optional): This specifies how many objects should be returned in the list
     - `skip` (optional): This specifies how many of the returned objects in the list should be skipped
-    - `orderBy` (optional): The sort order for posts in either ascending or descending order. The value can either `asc` or `desc`
+    - `orderBy` (optional): The sort order for Tasks in either ascending or descending order. The value can either `asc` or `desc`
 - `/user/:id/drafts`: Fetch user's drafts by their `id`
 - `/users`: Fetch all users
 ### `POST`
 
-- `/post`: Create a new post
+- `/post`: Create a New task
   - Body:
     - `title: String` (required): The title of the post
     - `content: String` (optional): The content of the post
@@ -81,7 +81,7 @@ You can access the REST API of the server using the following endpoints:
   - Body:
     - `email: String` (required): The email address of the user
     - `name: String` (optional): The name of the user
-    - `postData: PostCreateInput[]` (optional): The posts of the user
+    - `postData: PostCreateInput[]` (optional): The Tasks of the user
 
 ### `PUT`
 
@@ -113,7 +113,7 @@ model User {
   id      Int      @default(autoincrement()) @id
   name    String?
   email   String   @unique
-  posts   Post[]
+  Tasks   Post[]
 + profile Profile?
 }
 

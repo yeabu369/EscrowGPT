@@ -1,3 +1,4 @@
+import { LayoutDashboard, Users } from "lucide-react"
 import {
     AlertTriangle,
     ArrowRight,
@@ -45,6 +46,7 @@ import {
     arrowRight: ArrowRight,
     help: HelpCircle,
     pizza: Pizza,
+    users: Users,
     gitHub: ({ ...props }: LucideProps) => (
       <svg
         aria-hidden="true"

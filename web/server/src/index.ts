@@ -1,34 +1,40 @@
 import { Prisma, PrismaClient } from '@prisma/client'
 import express from 'express'
+import cors from 'cors'
 
 const prisma = new PrismaClient()
 const app = express()
 
 app.use(express.json())
+app.use(cors())
 
 app.post(`/signup`, async (req, res) => {
-  const { name, email, posts } = req.body
+  const { email } = req.body
 
-  const postData = posts?.map((post: Prisma.PostCreateInput) => {
-    return { title: post?.title, content: post?.content }
-  })
-
-  const result = await prisma.user.create({
-    data: {
-      name,
+  // Check if user exists
+  const user = await prisma.user.findUnique({
+    where: {
       email,
-      posts: {
-        create: postData,
-      },
     },
   })
 
+  if (user) {
+    return res.json({ user })
+  }
+
+  const result = await prisma.user.create({
+    data: {
+      email,
+    },
+  })
+
+  
   res.json(result)
 })
 
-app.post(`/post`, async (req, res) => {
+app.post(`/task`, async (req, res) => {
   const { title, content, authorEmail } = req.body
-  const result = await prisma.post.create({
+  const result = await prisma.task.create({
     data: {
       title,
       content,
@@ -38,11 +44,11 @@ app.post(`/post`, async (req, res) => {
   res.json(result)
 })
 
-app.put('/post/:id/views', async (req, res) => {
+app.put('/task/:id/views', async (req, res) => {
   const { id } = req.params
 
   try {
-    const post = await prisma.post.update({
+    const task = await prisma.task.update({
       where: { id: Number(id) },
       data: {
         viewCount: {
@@ -51,7 +57,7 @@ app.put('/post/:id/views', async (req, res) => {
       },
     })
 
-    res.json(post)
+    res.json(task)
   } catch (error) {
     res.json({ error: `Post with ID ${id} does not exist in the database` })
   }
@@ -61,14 +67,14 @@ app.put('/publish/:id', async (req, res) => {
   const { id } = req.params
 
   try {
-    const postData = await prisma.post.findUnique({
+    const postData = await prisma.task.findUnique({
       where: { id: Number(id) },
       select: {
         published: true,
       },
     })
 
-    const updatedPost = await prisma.post.update({
+    const updatedPost = await prisma.task.update({
       where: { id: Number(id) || undefined },
       data: { published: !postData?.published },
     })
@@ -78,14 +84,14 @@ app.put('/publish/:id', async (req, res) => {
   }
 })
 
-app.delete(`/post/:id`, async (req, res) => {
+app.delete(`/task/:id`, async (req, res) => {
   const { id } = req.params
-  const post = await prisma.post.delete({
+  const task = await prisma.task.delete({
     where: {
       id: Number(id),
     },
   })
-  res.json(post)
+  res.json(task)
 })
 
 app.get('/users', async (req, res) => {
@@ -102,17 +108,41 @@ app.get('/user/:id/drafts', async (req, res) => {
         id: Number(id),
       },
     })
-    .posts({
+    .Tasks({
       where: { published: false },
     })
 
   res.json(drafts)
 })
 
-app.get(`/post/:id`, async (req, res) => {
+app.put('/user/:id', async (req, res) => {
+  const { id } = req.params
+  const { name, email } = req.body
+  const user = await prisma.user.update({
+    where: { id: Number(id) || undefined },
+    data: {
+      name,
+      email,
+    },
+  })
+
+  res.json(user)
+})
+
+app.delete('/user/:id', async (req, res) => {
+  const { id } = req.params
+  const user = await prisma.user.delete({
+    where: {
+      id: Number(id),
+    },
+  })
+  res.json(user)
+})
+
+app.get(`/task/:id`, async (req, res) => {
   const { id }: { id?: string } = req.params
 
-  const post = await prisma.post.findUnique({
+  const post = await prisma.task.findUnique({
     where: { id: Number(id) },
   })
   res.json(post)
@@ -121,7 +151,7 @@ app.get(`/post/:id`, async (req, res) => {
 app.get('/feed', async (req, res) => {
   const { searchString, skip, take, orderBy } = req.query
 
-  const or: Prisma.PostWhereInput = searchString
+  const or: Prisma.TaskWhereInput = searchString
     ? {
       OR: [
         { title: { contains: searchString as string } },
@@ -130,7 +160,7 @@ app.get('/feed', async (req, res) => {
     }
     : {}
 
-  const posts = await prisma.post.findMany({
+  const Tasks = await prisma.task.findMany({
     where: {
       published: true,
       ...or,
@@ -143,7 +173,7 @@ app.get('/feed', async (req, res) => {
     },
   })
 
-  res.json(posts)
+  res.json(Tasks)
 })
 
 const server = app.listen(3001, () =>

@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-empty-interface */
 "use client"
 
 import * as React from "react"
-import { useRouter } from "react-router-dom"
-import { toast } from "@/hooks/use-toast"
 
+import { toast } from "@/hooks/use-toast"
+import { useNavigate } from "react-router-dom"
 import { cn } from "@/lib/utils"
 import { Icons } from "@/components/icons"
 import { buttonVariants } from "@/components/ui/button"
@@ -15,13 +16,13 @@ export function PostCreateButton({
   className,
   ...props
 }: PostCreateButtonProps) {
-  const router = useRouter()
+  const navigate = useNavigate()
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
 
   async function onClick() {
     setIsLoading(true)
 
-    const response = await fetch("/api/posts", {
+    const response = await fetch("/api/Tasks", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -36,7 +37,7 @@ export function PostCreateButton({
     if (!response?.ok) {
       if (response.status === 402) {
         return toast({
-          title: "Limit of 3 posts reached.",
+          title: "Limit of 3 Tasks reached.",
           description: "Please upgrade to the PRO plan.",
           variant: "destructive",
         })
@@ -52,9 +53,8 @@ export function PostCreateButton({
     const post = await response.json()
 
     // This forces a cache invalidation.
-    router.refresh()
-
-    router.push(`/editor/${post.id}`)
+    // Refresh here later
+    navigate(`/editor/${post.id}`)
   }
 
   return (
@@ -75,7 +75,7 @@ export function PostCreateButton({
       ) : (
         <Icons.add className="mr-2 h-4 w-4" />
       )}
-      New post
+      New task
     </button>
   )
 }

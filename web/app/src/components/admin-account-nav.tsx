@@ -1,6 +1,6 @@
 "use client"
 
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 import { siteConfig } from "@/config/site"
 import {
@@ -23,7 +23,9 @@ interface UserAccountNavProps extends React.HTMLAttributes<HTMLDivElement> {
   user: Pick<User, "image" | "name" | "email">
 }
 
-export function UserAccountNav({ user }: UserAccountNavProps) {
+export function AdminAccountNav({ user }: UserAccountNavProps) {
+  const navigate = useNavigate()
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -45,10 +47,7 @@ export function UserAccountNav({ user }: UserAccountNavProps) {
         </div>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link to="/dashboard">Dashboard</Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link to="/dashboard/billing">Billing</Link>
+          <Link to="/dashboard/admin">Users</Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link to="/dashboard/settings">Settings</Link>
@@ -58,6 +57,8 @@ export function UserAccountNav({ user }: UserAccountNavProps) {
           className="cursor-pointer"
           onSelect={(event: any) => {
             event.preventDefault()
+
+            navigate("/")
             // signOut({
             //   callbackUrl: `${window.location.origin}/login`,
             // })

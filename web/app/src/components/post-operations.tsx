@@ -1,8 +1,7 @@
 "use client"
 
 import * as React from "react"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { Link, useNavigate, useLocation } from "react-router-dom"
 import { toast } from "@/hooks/use-toast"
 import { Post } from "@prisma/client"
 
@@ -26,7 +25,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 async function deletePost(postId: string) {
-  const response = await fetch(`/api/posts/${postId}`, {
+  const response = await fetch(`/api/Tasks/${postId}`, {
     method: "DELETE",
   })
 
@@ -46,7 +45,9 @@ interface PostOperationsProps {
 }
 
 export function PostOperations({ post }: PostOperationsProps) {
-  const router = useRouter()
+  const navigate = useNavigate()
+  const location = useLocation()
+
   const [showDeleteAlert, setShowDeleteAlert] = React.useState<boolean>(false)
   const [isDeleteLoading, setIsDeleteLoading] = React.useState<boolean>(false)
 
@@ -59,7 +60,7 @@ export function PostOperations({ post }: PostOperationsProps) {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem>
-            <Link href={`/editor/${post.id}`} className="flex w-full">
+            <Link to={`/editor/${post.id}`} className="flex w-full">
               Edit
             </Link>
           </DropdownMenuItem>
@@ -94,7 +95,7 @@ export function PostOperations({ post }: PostOperationsProps) {
                 if (deleted) {
                   setIsDeleteLoading(false)
                   setShowDeleteAlert(false)
-                  router.refresh()
+                  navigate(location.pathname)
                 }
               }}
               className="bg-red-600 focus:ring-red-600"

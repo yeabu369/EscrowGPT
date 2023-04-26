@@ -4,6 +4,8 @@ import { Icons } from "@/components/icons"
 export type DashboardConfig = {
   mainNav: MainNavItem[]
   sidebarNav: SidebarNavItem[]
+  adminSidebarNav: SidebarNavItem[]
+  adminMainNav: MainNavItem[] 
 }
 
 export type SidebarNavItem = {
@@ -53,7 +55,7 @@ export const dashboardConfig: DashboardConfig = {
   ],
   sidebarNav: [
     {
-      title: "Posts",
+      title: "Tasks",
       href: "/dashboard",
       icon: "post",
     },
@@ -68,4 +70,22 @@ export const dashboardConfig: DashboardConfig = {
       icon: "settings",
     },
   ],
+  adminSidebarNav: [
+    {
+      title: "Users",
+      href: "/admin",
+      icon: "users",
+    },
+    {
+      title: "Settings",
+      href: "/admin/settings",
+      icon: "settings",
+    },
+  ],
+  adminMainNav: [
+    {
+      title: "Documentation",
+      href: "/docs",
+    }
+  ]
 }

@@ -13,6 +13,7 @@ import { Icons } from "./icons"
 import { buttonVariants } from "./ui/button"
 import { Label } from "./ui/label"
 import { Input } from "./ui/input"
+import axios from "axios"
 
 type UserAuthFormProps = React.HTMLAttributes<HTMLDivElement>
 
@@ -33,14 +34,13 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   async function onSubmit(data: FormData) {
     setIsLoading(true)
 
-    // navigate("/dashboard");
-    // const signInResult = await signIn("email", {
-    //   email: data.email.toLowerCase(),
-    //   redirect: false,
-    //   callbackUrl: searchParams?.get("from") || "/dashboard",
-    // })
+    const signInResult = await signIn("email", {
+      email: data.email.toLowerCase(),
+      redirect: false,
+      callbackUrl: "/dashboard",
+    })
 
-    // setIsLoading(false)
+    setIsLoading(false)
 
     // if (!signInResult?.ok) {
     //   return toast({
@@ -54,6 +54,25 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     //   title: "Check your email",
     //   description: "We sent you a login link. Be sure to check your spam too.",
     // })
+  }
+
+  const signIn = async (
+    provider: "email",
+    data: { email?: string; redirect?: boolean; callbackUrl?: string }
+  ) => {
+    const res: any = await axios.post(`http://localhost:3001/signup`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: data
+    })
+
+    if (res.ok) {
+      const result = await res.json()
+
+      return result
+    } else {
+      return { ok: false }
+    }
   }
 
   return (
