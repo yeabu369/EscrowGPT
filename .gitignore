@@ -1,1 +1,4 @@
 node_modules/
+web/.DS_Store
+.gitignore
+.DS_Store
