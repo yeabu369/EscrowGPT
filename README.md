@@ -1,1 +1,1 @@
-# EscrowGPT
+# ScheduleGPT
