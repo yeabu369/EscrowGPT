@@ -10,6 +10,7 @@ app.use(cors())
 
 app.post(`/signup`, async (req, res) => {
   const { email } = req.body
+  console.log(email)
 
   // Check if user exists
   const user = await prisma.user.findUnique({
@@ -19,7 +20,7 @@ app.post(`/signup`, async (req, res) => {
   })
 
   if (user) {
-    return res.json({ user })
+    return res.json({ user, ok: true })
   }
 
   const result = await prisma.user.create({
@@ -29,7 +30,7 @@ app.post(`/signup`, async (req, res) => {
   })
 
   
-  res.json(result)
+  res.json({result, ok: true})
 })
 
 app.post(`/task`, async (req, res) => {
@@ -136,7 +137,8 @@ app.delete('/user/:id', async (req, res) => {
       id: Number(id),
     },
   })
-  res.json(user)
+  
+  res.json({user, ok: true})
 })
 
 app.get(`/task/:id`, async (req, res) => {
@@ -146,34 +148,6 @@ app.get(`/task/:id`, async (req, res) => {
     where: { id: Number(id) },
   })
   res.json(post)
-})
-
-app.get('/feed', async (req, res) => {
-  const { searchString, skip, take, orderBy } = req.query
-
-  const or: Prisma.TaskWhereInput = searchString
-    ? {
-      OR: [
-        { title: { contains: searchString as string } },
-        { content: { contains: searchString as string } },
-      ],
-    }
-    : {}
-
-  const Tasks = await prisma.task.findMany({
-    where: {
-      published: true,
-      ...or,
-    },
-    include: { author: true },
-    take: Number(take) || undefined,
-    skip: Number(skip) || undefined,
-    orderBy: {
-      updatedAt: orderBy as Prisma.SortOrder,
-    },
-  })
-
-  res.json(Tasks)
 })
 
 const server = app.listen(3001, () =>

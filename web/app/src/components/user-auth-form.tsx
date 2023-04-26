@@ -34,42 +34,35 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   async function onSubmit(data: FormData) {
     setIsLoading(true)
 
-    const signInResult = await signIn("email", {
-      email: data.email.toLowerCase(),
-      redirect: false,
-      callbackUrl: "/dashboard",
-    })
+    const signInResult = await signIn(data.email.toLowerCase())
 
     setIsLoading(false)
 
-    // if (!signInResult?.ok) {
-    //   return toast({
-    //     title: "Something went wrong.",
-    //     description: "Your sign in request failed. Please try again.",
-    //     variant: "destructive",
-    //   })
-    // }
+    if (!signInResult?.ok) {
+      return toast({
+        title: "Something went wrong.",
+        description: "Your sign in request failed. Please try again.",
+        variant: "destructive",
+      })
+    }
 
-    // return toast({
-    //   title: "Check your email",
-    //   description: "We sent you a login link. Be sure to check your spam too.",
-    // })
+    data.email === "admin@schedulegpt.io" ? navigate("/dashboard/admin") : navigate("/dashboard");
   }
 
   const signIn = async (
-    provider: "email",
-    data: { email?: string; redirect?: boolean; callbackUrl?: string }
+    email: string
   ) => {
-    const res: any = await axios.post(`http://localhost:3001/signup`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: data
-    })
+    const { data }: any = await axios.post(
+      "http://localhost:3001/signup",
+      {
+        email,
+      }
+    )
 
-    if (res.ok) {
-      const result = await res.json()
+    console.log(data)
 
-      return result
+    if (data.ok) {
+      return data
     } else {
       return { ok: false }
     }
@@ -101,7 +94,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           </div>
           <button className={cn(buttonVariants())} disabled={isLoading}>
             {isLoading && (
-              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+              <Icons.spinner className="w-4 h-4 mr-2 animate-spin" />
             )}
             Sign In with Email
           </button>

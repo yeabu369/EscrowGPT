@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils"
 import { EmptyPlaceholder } from "@/components/empty-placeholder"
 import { DashboardHeader } from "@/components/header"
 import { PostCreateButton } from "@/components/post-create-button"
-import { PostItem } from "@/components/post-item"
+import { UserItem } from "@/components/user-item"
 import { DashboardShell } from "@/components/shell"
 import { buttonVariants } from "@/components/ui/button"
 
@@ -16,6 +16,7 @@ export const metadata = {
 
 export default function AdminDashboardPage() {
   const { users } = useLoaderData() as { users: User[] };
+  console.log(users);
   const user = {
     id: 1,
     name: "John Doe",
@@ -30,12 +31,10 @@ export default function AdminDashboardPage() {
 
   return (
     <DashboardShell>
-      <DashboardHeader heading="Users" text="Mange users here">
-        <PostCreateButton />
-      </DashboardHeader>
+      <DashboardHeader heading="Users" text="Mange users here" />
       <div>
       {users?.length ? (
-          <div className="divide-y divide-neutral-200 rounded-md border border-slate-200">
+          <div className="border divide-y rounded-md divide-neutral-200 border-slate-200">
             {users.map((user) => (
               <UserItem key={user.id} user={user} />
             ))}
@@ -45,14 +44,8 @@ export default function AdminDashboardPage() {
             <EmptyPlaceholder.Icon name="post" />
             <EmptyPlaceholder.Title>No users created</EmptyPlaceholder.Title>
             <EmptyPlaceholder.Description>
-              You don&apos;t have any users yet. Start creating content.
+              You don&apos;t have any users yet.
             </EmptyPlaceholder.Description>
-            <PostCreateButton
-              className={cn(
-                buttonVariants({ variant: "outline" }),
-                "text-slate-900"
-              )}
-            />
           </EmptyPlaceholder>
         )}
       </div>

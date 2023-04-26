@@ -1,4 +1,3 @@
-
 import { Link, useNavigate } from "react-router-dom"
 
 import { cn } from "@/lib/utils"
@@ -15,7 +14,7 @@ export default function LoginPage() {
   const navigate = useNavigate() 
 
   return (
-    <div className="flex h-screen w-screen flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-center w-screen h-screen">
       <button
         onClick={() => navigate(-1)}
         className={cn(
@@ -24,13 +23,13 @@ export default function LoginPage() {
         )}
       >
         <>
-          <Icons.chevronLeft className="mr-2 h-4 w-4" />
+          <Icons.chevronLeft className="w-4 h-4 mr-2" />
           Back
         </>
       </button>
       <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
         <div className="flex flex-col space-y-2 text-center">
-          <Icons.logo className="mx-auto h-6 w-6" />
+          <Icons.logo className="w-6 h-6 mx-auto" />
           <h1 className="text-2xl font-semibold tracking-tight">
             Welcome back
           </h1>
@@ -39,10 +38,10 @@ export default function LoginPage() {
           </p>
         </div>
         <UserAuthForm />
-        <p className="px-8 text-center text-sm text-slate-500 dark:text-slate-400">
+        <p className="px-8 text-sm text-center text-slate-500 dark:text-slate-400">
           <Link
             to="/auth/signup"
-            className="hover:text-brand underline underline-offset-4"
+            className="underline hover:text-brand underline-offset-4"
           >
             Don&apos;t have an account? Sign Up
           </Link>
