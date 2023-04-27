@@ -9,4 +9,6 @@ describe('get the first user', () => {
         expect(user?.name).toBe('admin')
         expect(user?.email).toBe('admin@schedulegpt.io')
     })
+
+    prisma.$disconnect()
 })

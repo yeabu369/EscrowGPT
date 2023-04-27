@@ -40,7 +40,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     setIsLoading(false)
 
     if (!signInResult?.ok) {
-      return toast({
+      return console.log({
         title: "Something went wrong.",
         description: "Your sign in request failed. Please try again.",
         variant: "destructive",
@@ -61,7 +61,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     )
 
     if (data.ok) {
-      localforage.setItem("user", JSON.stringify(data.user));
+      await localforage.setItem("user", JSON.stringify(data.user));
       return data
     } else {
       return { ok: false }
