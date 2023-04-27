@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { useNavigate, useSearchParams } from "react-router-dom"
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom"
 import { toast } from "../hooks/use-toast"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -31,6 +31,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
   const searchParams = useSearchParams()
   const navigate = useNavigate()
+  const location = useLocation()
 
   async function onSubmit(data: FormData) {
     setIsLoading(true)
@@ -46,7 +47,12 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         variant: "destructive",
       })
     }
-
+    
+    if (location.pathname === "/auth/signup") {
+      navigate("/auth/login")
+      return
+    }
+    
     data.email === "admin@schedulegpt.io" ? navigate("/dashboard/admin") : navigate("/dashboard");
   }
 
@@ -61,7 +67,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     )
 
     if (data.ok) {
-      await localforage.setItem("user", JSON.stringify(data.user));
+      await localforage.setItem("user", JSON.stringify(data.user))
       return data
     } else {
       return { ok: false }
