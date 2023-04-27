@@ -1,6 +1,6 @@
 "use client"
 
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 import { siteConfig } from "@/config/site"
 import {
@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { UserAvatar } from "@/components/user-avatar"
 import React from "react"
+import localforage from "localforage"
 
 type User = {
     name: string
@@ -24,12 +25,19 @@ interface UserAccountNavProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export function UserAccountNav({ user }: UserAccountNavProps) {
+  const navigate = useNavigate()
+  const signOut = ({ callbackUrl }: { callbackUrl: string }) => {
+    console.log("sign out")
+    localforage.removeItem("user");
+    navigate(callbackUrl)
+  }
+  
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
         <UserAvatar
           user={{ name: user.name || null, image: user.image || null }}
-          className="h-8 w-8"
+          className="w-8 h-8"
         />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
@@ -58,9 +66,9 @@ export function UserAccountNav({ user }: UserAccountNavProps) {
           className="cursor-pointer"
           onSelect={(event: any) => {
             event.preventDefault()
-            // signOut({
-            //   callbackUrl: `${window.location.origin}/login`,
-            // })
+            signOut({
+              callbackUrl: `/auth/login`,
+            })
           }}
         >
           Sign out

@@ -14,6 +14,7 @@ import { buttonVariants } from "./ui/button"
 import { Label } from "./ui/label"
 import { Input } from "./ui/input"
 import axios from "axios"
+import localforage from "localforage"
 
 type UserAuthFormProps = React.HTMLAttributes<HTMLDivElement>
 
@@ -59,9 +60,8 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       }
     )
 
-    console.log(data)
-
     if (data.ok) {
+      localforage.setItem("user", JSON.stringify(data.user));
       return data
     } else {
       return { ok: false }

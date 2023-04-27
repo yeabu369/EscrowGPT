@@ -9,7 +9,7 @@ app.use(express.json())
 app.use(cors())
 
 app.post(`/signup`, async (req, res) => {
-  const { email } = req.body
+  const { email, name } = req.body
   console.log(email)
 
   // Check if user exists
@@ -26,6 +26,7 @@ app.post(`/signup`, async (req, res) => {
   const result = await prisma.user.create({
     data: {
       email,
+      name
     },
   })
 
@@ -118,17 +119,21 @@ app.get('/user/:id/drafts', async (req, res) => {
 
 app.put('/user/:id', async (req, res) => {
   const { id } = req.params
-  const { name, email } = req.body
+  const { name } = req.body
+  console.log(name)
   const user = await prisma.user.update({
     where: { id: Number(id) || undefined },
     data: {
-      name,
-      email,
+      name
     },
   })
 
-  res.json(user)
+  console.log(user)
+
+
+  res.json({user, ok: true})
 })
+
 
 app.delete('/user/:id', async (req, res) => {
   const { id } = req.params
