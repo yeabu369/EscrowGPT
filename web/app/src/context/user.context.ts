@@ -11,25 +11,3 @@ export const UserContext: Context<UserContextInterface> = createContext<UserCont
 });
 
 export default UserContext;
-
-// q: How to use this context?
-// a: See web/app/src/components/Navbar.tsx
-// import { useContext } from 'react';
-// import UserContext from '../context/user.context';
-//
-// const { user } = useContext(UserContext);
-// console.log(user);
-
-// q: How to update this context?
-// a: See web/app/src/components/Navbar.tsx
-// import { useContext } from 'react';
-// import UserContext from '../context/user.context';
-//
-// const { user } = useContext(UserContext);
-// console.log(user);
-//
-// const { setUser } = useContext(UserContext);
-// setUser({ id: 1, name: 'John Doe' });
-// console.log(user);
-
-// q: Do I have to wrap the navbar in this context for me to use it?

@@ -10,7 +10,6 @@ import AdminLayout from "./(dashboard)/admin/Layout";
 import NotFoundPage from "./(404)/Layout";
 import usersLoader from "../lib/loaders/users";
 import { SettingsPageWithUser } from "./(dashboard)/dashboard/settings/page";
-import UserContext from "@/context/user.context";
 
 export const router = createBrowserRouter(
   [
@@ -29,10 +28,6 @@ export const router = createBrowserRouter(
           path: '/auth/signup',
           element: <AuthLayout><RegisterPage /></AuthLayout>
         },
-        {
-          path: '/auth/forgot-password',
-          element: <div>Forgot Password</div>
-        }
       ],
     },
     {
